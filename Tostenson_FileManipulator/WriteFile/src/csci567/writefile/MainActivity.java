@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 
+	String holder;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,6 +32,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		buttonwrite.setOnClickListener(this);
 		Button buttonread = (Button) findViewById(R.id.button2);
 		buttonread.setOnClickListener(this);
+		Button buttonappend = (Button) findViewById(R.id.button3);
+		buttonappend.setOnClickListener(this);
 	}
 
 	@Override
@@ -41,6 +45,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	private boolean writeFile(String string){
 		try {
+			holder = string;
 			File file = new File(Environment.getExternalStorageDirectory().getPath() +"/test.txt");
 			Log.d("FileWrite: ",Environment.getExternalStorageDirectory().getPath() +"/test.txt");
 			// if file doesnt exists, then create it
@@ -57,6 +62,28 @@ public class MainActivity extends Activity implements OnClickListener {
  
 		} catch (IOException e) {
 			Log.d("FileWriteError: ", e.toString());
+		}
+		return false;
+	}
+	
+	private boolean appendFile(String string){
+		try {
+			File file = new File(Environment.getExternalStorageDirectory().getPath() +"/test.txt");
+			Log.d("FileAppend: ",Environment.getExternalStorageDirectory().getPath() +"/test.txt");
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+ 
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(holder + string);
+			bw.close();
+ 
+			Log.d("FileAppend: ","Done");
+ 
+		} catch (IOException e) {
+			Log.d("FileAppendError: ", e.toString());
 		}
 		return false;
 	}
@@ -87,9 +114,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View src) {
+		EditText txt = (EditText) findViewById(R.id.edittext); 
 		switch (src.getId()) {
-	    	case R.id.button1:
-	    		EditText txt = (EditText) findViewById(R.id.edittext); 
+	    	case R.id.button1:	    		
 	        	writeFile(txt.getText().toString());
 	        	break;
 	    	case R.id.button2:
@@ -97,6 +124,9 @@ public class MainActivity extends Activity implements OnClickListener {
             	//Replace the text in the textView with the following text.      
             	txt2.setText(readFile());
 	        	break;
+	    	case R.id.button3:
+	    		appendFile(txt.getText().toString());
+	    		break;
 		}	
 		
 	}

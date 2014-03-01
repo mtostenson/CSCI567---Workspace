@@ -7,5 +7,6 @@
     <string name="hint">Type a string</string>
     <string name="button">Write File</string>
     <string name="button2">Read File</string>
+    <string name="button3">Append</string>
 
 </resources>
